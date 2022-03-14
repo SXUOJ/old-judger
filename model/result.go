@@ -14,3 +14,22 @@ type Result struct {
 
 	ErrorInf string `json:"msg"`
 }
+
+const (
+	Waiting JudgeStatus = 0
+
+	StatusAC JudgeStatus = 1
+
+	StatusWA JudgeStatus = 2
+
+	StatusCE JudgeStatus = 3
+
+	StatusRE  JudgeStatus = 4
+	StatusTLE JudgeStatus = 5
+	StatusMLE JudgeStatus = 6
+	StatusOLE JudgeStatus = 7
+
+	StatusPE JudgeStatus = 8
+
+	StatusSE JudgeStatus = 9
+)
