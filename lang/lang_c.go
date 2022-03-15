@@ -1,17 +1,18 @@
 package lang
 
 import (
-	"fmt"
 	"os/exec"
 )
 
 type C struct {
-	Dir string
+	SourcePath string
+	BinaryPath string
 }
 
-func newC(dir string) *C {
+func newC(sourcePath, binaryPath string) *C {
 	return &C{
-		Dir: dir,
+		SourcePath: sourcePath,
+		BinaryPath: binaryPath,
 	}
 }
 
@@ -23,8 +24,8 @@ func (c *C) Compile() *exec.Cmd {
 	return exec.Command(
 		"/usr/bin/gcc",
 		"-o",
-		fmt.Sprintf("%v/Main", c.Dir),
-		fmt.Sprintf("%v/Main.c", c.Dir),
+		c.BinaryPath,
+		c.SourcePath,
 		"-fmax-errors=3",
 		"-std=c11",
 		"-lm",
@@ -35,7 +36,5 @@ func (c *C) Compile() *exec.Cmd {
 }
 
 func (c *C) Run() *exec.Cmd {
-	return exec.Command(
-		fmt.Sprintf("%v/Main", c.Dir),
-	)
+	return nil
 }

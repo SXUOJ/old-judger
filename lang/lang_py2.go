@@ -1,17 +1,16 @@
 package lang
 
 import (
-	"fmt"
 	"os/exec"
 )
 
 type Python2 struct {
-	Dir string
+	SourcePath string
 }
 
-func newPython2(dir string) *Python2 {
+func newPython2(sourcePath string) *Python2 {
 	return &Python2{
-		Dir: dir,
+		SourcePath: sourcePath,
 	}
 }
 
@@ -26,6 +25,6 @@ func (p *Python2) Compile() *exec.Cmd {
 func (p *Python2) Run() *exec.Cmd {
 	return exec.Command(
 		"/usr/bin/python",
-		fmt.Sprintf("%v/Main.py", p.Dir),
+		p.SourcePath,
 	)
 }

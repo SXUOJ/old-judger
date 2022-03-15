@@ -26,20 +26,20 @@ type Lang interface {
 	Run() *exec.Cmd
 }
 
-func NewLang(langType string, langDir string) (Lang, error) {
+func NewLang(langType, sourcePath, binaryPath string) (Lang, error) {
 	switch langType {
 	case "C":
-		return newC(langDir), nil
+		return newC(sourcePath, binaryPath), nil
 	case "Cpp":
-		return newCpp(langDir), nil
+		return newCpp(sourcePath, binaryPath), nil
 	case "Go":
-		return newGo(langDir), nil
+		return newGo(sourcePath, binaryPath), nil
 	case "Java":
 		return nil, nil
 	case "Python2":
-		return newPython2(langDir), nil
+		return newPython2(sourcePath), nil
 	case "Python3":
-		return newPython3(langDir), nil
+		return newPython3(sourcePath), nil
 	default:
 		return nil, ERROR_NOT_SUPPORT_LANG
 	}

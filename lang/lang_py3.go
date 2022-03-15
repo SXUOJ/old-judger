@@ -1,17 +1,16 @@
 package lang
 
 import (
-	"fmt"
 	"os/exec"
 )
 
 type Python3 struct {
-	Dir string
+	SourcePath string
 }
 
-func newPython3(dir string) *Python3 {
+func newPython3(sourcePath string) *Python3 {
 	return &Python3{
-		Dir: dir,
+		SourcePath: sourcePath,
 	}
 }
 
@@ -26,6 +25,6 @@ func (p *Python3) Compile() *exec.Cmd {
 func (p *Python3) Run() *exec.Cmd {
 	return exec.Command(
 		"/usr/bin/python3",
-		fmt.Sprintf("%v/Main.py", p.Dir),
+		p.SourcePath,
 	)
 }

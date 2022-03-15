@@ -1,36 +1,29 @@
 package lang
 
 import (
-	"fmt"
 	"os/exec"
 )
 
 type Go struct {
-	Dir string
+	SourcePath string
+	BinaryPath string
 }
 
-func newGo(dir string) *Go {
+func newGo(sourcePath, binaryPath string) *Go {
 	return &Go{
-		Dir: dir,
+		SourcePath: sourcePath,
+		BinaryPath: binaryPath,
 	}
 }
 
 func (g *Go) NeedCompile() bool {
-	return true
+	return false
 }
 
 func (g *Go) Compile() *exec.Cmd {
-	return exec.Command(
-		"/usr/bin/go",
-		"build",
-		"-o",
-		fmt.Sprintf("%v/Main", g.Dir),
-		fmt.Sprintf("%v/Main.go", g.Dir),
-	)
+	return nil
 }
 
 func (g *Go) Run() *exec.Cmd {
-	return exec.Command(
-		fmt.Sprintf("%v/Main", g.Dir),
-	)
+	return nil
 }
