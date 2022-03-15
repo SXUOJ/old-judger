@@ -28,18 +28,19 @@ func TestSubmitRouteParameter(t *testing.T) {
 	router := setupRouter()
 
 	params := model.Submit{
-		SubmitId:       "1",
+		SubmitId:       "test_1",
 		ProblemId:      "1",
 		ProblemType:    "1",
-		CodeType:       "c",
-		CodeSourcePath: "main.c",
+		CodeType:       "C",
+		CodeSourcePath: "./test/tmp/main.c",
 		Limit: model.Limit{
-			TimeLimit:   "2000",
+			TimeLimit:   "1000",
 			MemoryLimit: "256",
 		},
 	}
 
 	paramsByte, _ := json.Marshal(params)
+	// log.Printf("%s\n", paramsByte)
 	req, _ := http.NewRequest("POST", "/submit", bytes.NewBuffer(paramsByte))
 
 	w := httptest.NewRecorder()
