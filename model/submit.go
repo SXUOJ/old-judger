@@ -4,15 +4,15 @@ type Submit struct {
 	SubmitId string `json:"submit_id"`
 
 	ProblemId   string `json:"problem_id"`
-	ProblemType int64  `json:"problem_type"`
+	ProblemType string `json:"problem_type"`
 
-	CodeType   string `json:"code_type"`
-	CodeSource string `json:"code_source"`
+	CodeType       string `json:"code_type"`
+	CodeSourcePath string `json:"code_source_path"`
 
 	Limit
 }
 
 type Limit struct {
-	TimeLimit   int64 `json:"time_limit"`
-	MemoryLimit int64 `json:"memory_limit"`
+	TimeLimit   int64 `json:"time_limit,string"`
+	MemoryLimit int64 `json:"memory_limit,string"`
 }
