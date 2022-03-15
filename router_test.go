@@ -34,8 +34,8 @@ func TestSubmitRouteParameter(t *testing.T) {
 		CodeType:       "c",
 		CodeSourcePath: "main.c",
 		Limit: model.Limit{
-			TimeLimit:   2000,
-			MemoryLimit: 256,
+			TimeLimit:   "2000",
+			MemoryLimit: "256",
 		},
 	}
 

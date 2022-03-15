@@ -13,6 +13,6 @@ type Submit struct {
 }
 
 type Limit struct {
-	TimeLimit   int64 `json:"time_limit,string"`
-	MemoryLimit int64 `json:"memory_limit,string"`
+	TimeLimit   string `json:"time_limit"`
+	MemoryLimit string `json:"memory_limit"`
 }
