@@ -13,8 +13,8 @@ const (
 	_ = iota
 	LangC
 	LangCpp
-	LangJava
 	LangGo
+	LangJava
 	LangPython2
 	LangPython3
 )
@@ -32,10 +32,10 @@ func NewLang(langType string, langDir string) (Lang, error) {
 		return newC(langDir), nil
 	case "Cpp":
 		return newCpp(langDir), nil
-	case "Java":
-		return nil, nil
 	case "Go":
 		return newGo(langDir), nil
+	case "Java":
+		return nil, nil
 	case "Python2":
 		return newPython2(langDir), nil
 	case "Python3":
