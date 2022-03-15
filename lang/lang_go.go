@@ -7,12 +7,14 @@ import (
 type Go struct {
 	SourcePath string
 	BinaryPath string
+	Suffix     string
 }
 
 func newGo(sourcePath, binaryPath string) *Go {
 	return &Go{
 		SourcePath: sourcePath,
 		BinaryPath: binaryPath,
+		Suffix:     "go",
 	}
 }
 

@@ -7,12 +7,14 @@ import (
 type Cpp struct {
 	SourcePath string
 	BinaryPath string
+	Suffix     string
 }
 
 func newCpp(sourcePath, binaryPath string) *Cpp {
 	return &Cpp{
 		SourcePath: sourcePath,
 		BinaryPath: binaryPath,
+		Suffix:     "cpp",
 	}
 }
 

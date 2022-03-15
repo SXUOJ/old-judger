@@ -6,11 +6,13 @@ import (
 
 type Python2 struct {
 	SourcePath string
+	Suffix     string
 }
 
 func newPython2(sourcePath string) *Python2 {
 	return &Python2{
 		SourcePath: sourcePath,
+		Suffix:     "py",
 	}
 }
 
