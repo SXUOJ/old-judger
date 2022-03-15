@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/Sxu-Online-Judge/judger/judge"
 	"github.com/Sxu-Online-Judge/judger/model"
 	"github.com/gin-gonic/gin"
 )
@@ -16,29 +17,27 @@ func setupRouter() *gin.Engine {
 	})
 
 	r.POST("/submit", func(c *gin.Context) {
-		test := model.Submit{}
-		if err := c.ShouldBindJSON(&test); err != nil {
+		submit := model.Submit{}
+		if err := c.ShouldBindJSON(&submit); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"msg": "bind model error",
 			})
 			return
 		}
 
-		//TODO:judge
+		judger := judge.NewJudger(&submit)
+		// judger.Print()
+		result := judger.Judge()
 
 		c.JSON(http.StatusOK, gin.H{
-			"submit_id":        test.SubmitId,
-			"problem_id":       test.ProblemId,
-			"problem_type":     test.ProblemType,
-			"code_type":        test.CodeType,
-			"code_source_path": test.CodeSourcePath,
-			"time_limit":       test.TimeLimit,
-			"memory_limit":     test.MemoryLimit,
+			"msg":    "good",
+			"result": result,
 		})
 	})
 	return r
 }
 
+//TODO: 1. add log
 func main() {
 	r := setupRouter()
 	r.Run()
