@@ -3,6 +3,8 @@ package model
 type JudgeStatus int
 
 type Result struct {
+	SampleId int `json:"sample_id"`
+
 	Status JudgeStatus `json:"status"`
 
 	TimeUsed   int64 `json:"time_used,omitempty"`
