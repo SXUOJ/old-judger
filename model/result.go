@@ -1,7 +1,5 @@
 package model
 
-type JudgeStatus int
-
 type Result struct {
 	SampleId string `json:"sample_id,omitempty"`
 
@@ -16,75 +14,21 @@ type Result struct {
 	ErrorInf string `json:"msg,omitempty"`
 }
 
-const (
-	Waiting JudgeStatus = 0
+var judgeStatus = map[string]string{
+	"1": "Accepted",
+	"2": "Wrong Answer",
+	"3": "Compile Error",
+	"4": "Runtime Error",
+	"5": "Time Limit Exceed",
+	"6": "Memory Limit Exceed",
+	"7": "Output Limit Exceed",
+	"8": "Presentation Error",
+	"9": "System Error",
+}
 
-	StatusAC JudgeStatus = 1
-
-	StatusWA JudgeStatus = 2
-
-	StatusCE JudgeStatus = 3
-
-	StatusRE  JudgeStatus = 4
-	StatusTLE JudgeStatus = 5
-	StatusMLE JudgeStatus = 6
-	StatusOLE JudgeStatus = 7
-
-	StatusPE JudgeStatus = 8
-
-	StatusSE JudgeStatus = 9
-)
-
-// func NewResult() *Result {
-// 	return &Result{}
-// }
-
-// func (r *Result) Accepted(time, memory int64) {
-// 	r.Status = StatusAC
-// 	r.TimeUsed = time
-// 	r.MemoryUsed = memory
-// }
-
-// func (r *Result) CompileError(msg string) {
-// 	r.Status = StatusCE
-// 	r.ErrorInf = "Compile Error"
-// }
-
-// func (r *Result) RuntimeError() {
-// 	r.Status = StatusRE
-// 	r.ErrorInf = "Runtime Error"
-// }
-
-// func (r *Result) TimeLimitExceed(time, memory int64) {
-// 	r.Status = StatusTLE
-// 	r.TimeUsed = time
-// 	r.MemoryUsed = memory
-// 	r.ErrorInf = "Time Limit Exceeded Error"
-// }
-// func (r *Result) MemoryLimitExceed(time, memory int64) {
-// 	r.Status = StatusTLE
-// 	r.TimeUsed = time
-// 	r.MemoryUsed = memory
-// 	r.ErrorInf = "Memory Limit Exceeded Error"
-// }
-
-// func (r *Result) OutputLimitExceed(time, memory int64) {
-// 	r.Status = StatusTLE
-// 	r.TimeUsed = time
-// 	r.MemoryUsed = memory
-// 	r.ErrorInf = "Status Limit Exceeded Error"
-// }
-
-// func (r *Result) PresentationError(time, memory int64) {
-// 	r.Status = StatusPE
-// 	r.TimeUsed = time
-// 	r.MemoryUsed = memory
-// 	r.ErrorInf = "Presentation Error"
-// }
-
-// func (r *Result) WrongAnswer(time, memory int64, input, output, stdOutput string) {
-// 	r.Status = StatusWA
-// 	r.TimeUsed = time
-// 	r.MemoryUsed = memory
-// 	r.StdOutput = stdOutput
-// }
+func GetJudgeStatus(result string) string {
+	if v, ok := judgeStatus[result]; ok {
+		return v
+	}
+	return "no"
+}
