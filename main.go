@@ -30,7 +30,7 @@ func setupRouter() *gin.Engine {
 		result := judger.Judge()
 
 		c.JSON(http.StatusOK, gin.H{
-			"msg":    "good",
+			"msg":    "ok",
 			"result": result,
 		})
 	})
