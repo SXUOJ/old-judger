@@ -1,6 +1,7 @@
 package judge
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
@@ -129,7 +130,7 @@ func (judger *Judger) judgerOneByOne(sampleId string) (_result *model.Result) {
 	runner := exec.Command("./sandbox",
 		"--code_type", "C",
 		"--bin_path", judger.binPath,
-		"--seccomp_rule_name", "c_cpp",
+		"--seccomp_rule_name", "general",
 		"--input_path", filepath.Join(judger.sampleDir, strings.Join([]string{sampleId, ".in"}, "")),
 		"--output_path", filepath.Join(judger.outputDir, strings.Join([]string{sampleId, ".out"}, "")),
 		// "--error_path ",
@@ -156,7 +157,14 @@ func (judger *Judger) judgerOneByOne(sampleId string) (_result *model.Result) {
 	// log.Printf("Bytes: %s\n", o.Bytes())
 	json.Unmarshal(o.Bytes(), &_result)
 	_result.SampleId = sampleId
+
+	if ok := judger.Compare(sampleId); ok {
+		_result.Result = "Accept"
+	} else {
+		_result.Result = "Wrong Answer"
+	}
 	// log.Println(_result)
+
 	return _result
 }
 
@@ -165,4 +173,41 @@ func (judger *Judger) newLang() (lang.Lang, error) {
 		judger.codeSourcePath,
 		judger.binPath,
 	)
+}
+
+func (judger *Judger) Compare(sampleId string) bool {
+	//TODO: presentation judge
+	outPath := filepath.Join(judger.outputDir, strings.Join([]string{sampleId, ".out"}, ""))
+	ansPath := filepath.Join(judger.sampleDir, strings.Join([]string{sampleId, ".out"}, ""))
+
+	b, err := ioutil.ReadFile(ansPath)
+	if err != nil {
+		b = []byte{}
+	}
+
+	o, err := ioutil.ReadFile(outPath)
+	if err != nil {
+		o = []byte{}
+	}
+
+	ans := plain(b)
+	out := plain(o)
+	log.Printf("ans:= %s", ans)
+	log.Printf("out:= %s", out)
+
+	if out == ans {
+		return true
+	}
+	return false
+}
+
+func plain(raw []byte) string {
+	buf := bufio.NewScanner(bytes.NewReader(raw))
+	var b bytes.Buffer
+	newline := []byte{'\n'}
+	for buf.Scan() {
+		b.Write(bytes.TrimSpace(buf.Bytes()))
+		b.Write(newline)
+	}
+	return b.String()
 }
