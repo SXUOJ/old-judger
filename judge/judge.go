@@ -69,15 +69,20 @@ func (judger *Judger) Judge() *[]model.Result {
 		return nil
 	}
 
+	var e bytes.Buffer
 	if ok := lang.NeedCompile(); ok {
 		compiler := lang.Compile()
 		compiler.Stdin = os.Stdin
 		compiler.Stdout = os.Stdout
-		compiler.Stderr = os.Stderr
+		compiler.Stderr = &e
 
 		if err := compiler.Run(); err != nil {
 			log.Println("Compile failed")
-			return nil
+			return &[]model.Result{
+				{
+					ErrorInf: e.String(),
+				},
+			}
 		}
 	}
 
