@@ -41,6 +41,8 @@ func NewLang(langType, sourcePath, binaryPath string) (Lang, error) {
 	switch langType {
 	case "C":
 		return newC(sourcePath, binaryPath), nil
+	case "Cpp":
+		return newCpp(sourcePath, binaryPath), nil
 	default:
 		return nil, ERROR_NOT_SUPPORT_LANG
 	}

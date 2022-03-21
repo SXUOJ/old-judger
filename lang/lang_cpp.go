@@ -35,3 +35,23 @@ func newCpp(sourcePath, binaryPath string) *Cpp {
 func (c *Cpp) NeedCompile() bool {
 	return true
 }
+
+func (c *Cpp) Bin() string {
+	return c.bin
+}
+
+func (c *Cpp) Args() string {
+	return c.args
+}
+
+func (c *Cpp) RealTimeLimit() string {
+	return c.real_time_limit
+}
+
+func (c *Cpp) CpuTimeLimit() string {
+	return c.cpu_time_limit
+}
+
+func (c *Cpp) MemoryLimit() string {
+	return c.memory_limit
+}
