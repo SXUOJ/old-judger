@@ -9,9 +9,9 @@ type C struct {
 	bin  string
 	args string
 
-	real_time_limit  string
-	cpu_time_limit   string
-	max_memory_limit string
+	real_time_limit string
+	cpu_time_limit  string
+	memory_limit    string
 }
 
 func newC(sourcePath, binaryPath string) *C {
@@ -29,9 +29,9 @@ func newC(sourcePath, binaryPath string) *C {
 			"-DONLINE_JUDGE",
 			"",
 		}, "&"),
-		real_time_limit:  "5000",
-		cpu_time_limit:   "3000",
-		max_memory_limit: strconv.FormatInt(128*1024*1024, 10),
+		real_time_limit: "5000",
+		cpu_time_limit:  "3000",
+		memory_limit:    strconv.FormatInt(128*1024*1024, 10),
 	}
 }
 
@@ -56,5 +56,5 @@ func (c *C) CpuTimeLimit() string {
 }
 
 func (c *C) MemoryLimit() string {
-	return c.max_memory_limit
+	return c.memory_limit
 }

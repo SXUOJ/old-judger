@@ -1,42 +1,37 @@
 package lang
 
 import (
-	"os/exec"
+	"strconv"
+	"strings"
 )
 
 type Cpp struct {
-	SourcePath string
-	BinaryPath string
-	Suffix     string
+	lang
 }
 
 func newCpp(sourcePath, binaryPath string) *Cpp {
 	return &Cpp{
-		SourcePath: sourcePath,
-		BinaryPath: binaryPath,
-		Suffix:     "cpp",
+		lang{
+			bin: "/usr/bin/g++",
+			args: strings.Join([]string{
+				"-o",
+				binaryPath,
+				sourcePath,
+				"-fmax-errors=3",
+				"-std=c11",
+				"-lm",
+				"-w",
+				"-O2",
+				"-DONLINE_JUDGE",
+				"",
+			}, "&"),
+			real_time_limit: "5000",
+			cpu_time_limit:  "3000",
+			memory_limit:    strconv.FormatInt(128*1024*1024, 10),
+		},
 	}
 }
 
 func (c *Cpp) NeedCompile() bool {
 	return true
-}
-
-func (c *Cpp) Compile() *exec.Cmd {
-	return exec.Command(
-		"/usr/bin/g++",
-		"-o",
-		c.BinaryPath,
-		c.SourcePath,
-		"-fmax-errors=3",
-		"-std=c11",
-		"-lm",
-		"-w",
-		"-O2",
-		"-DONLINE_JUDGE",
-	)
-}
-
-func (c *Cpp) Run() *exec.Cmd {
-	return nil
 }

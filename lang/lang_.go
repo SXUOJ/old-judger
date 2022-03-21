@@ -18,6 +18,15 @@ const (
 	LangPython3
 )
 
+type lang struct {
+	bin  string
+	args string
+
+	real_time_limit string
+	cpu_time_limit  string
+	memory_limit    string
+}
+
 type Lang interface {
 	NeedCompile() bool
 
