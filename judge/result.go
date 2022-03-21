@@ -1,7 +1,5 @@
 package judge
 
-import "strconv"
-
 type CompileResult struct {
 	Status  string `json:"status,omitempty"`
 	CpuTime string `json:"cpu_time,omitempty"`
@@ -26,16 +24,15 @@ type JudgeResult struct {
 }
 
 const (
-	_ = iota
-	StatusAC
-	StatusWA
-	StatusCE
-	StatusRE
-	StatusTLE
-	StatusMLE
-	StatusOLE
-	StatusPE
-	StatusSE
+	StatusAC  = "1"
+	StatusWA  = "2"
+	StatusCE  = "3"
+	StatusRE  = "4"
+	StatusTLE = "5"
+	StatusMLE = "6"
+	StatusOLE = "7"
+	StatusPE  = "8"
+	StatusSE  = "9"
 )
 
 var judgeStatus = map[string]string{
@@ -50,8 +47,8 @@ var judgeStatus = map[string]string{
 	"9": "System Error",
 }
 
-func GetJudgeStatus(result int) string {
-	if v, ok := judgeStatus[strconv.FormatInt(int64(result), 10)]; ok {
+func GetJudgeStatus(result string) string {
+	if v, ok := judgeStatus[result]; ok {
 		return v
 	}
 	return "no"
