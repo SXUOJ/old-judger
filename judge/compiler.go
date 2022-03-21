@@ -73,7 +73,7 @@ func (c *Compiler) Run() (_result *CompileResult) {
 			log.Printf("%s", o.Bytes())
 			log.Printf("%s", e.Bytes())
 			return &CompileResult{
-				Status:   GetJudgeStatus(StatusCE),
+				Status:   StatusCE,
 				ErrorInf: strings.Join([]string{o.String(), e.String()}, "\n"),
 			}
 		}
