@@ -13,15 +13,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Sxu-Online-Judge/judger/lang"
-	"github.com/Sxu-Online-Judge/judger/model"
 	"github.com/Sxu-Online-Judge/judger/util"
-)
-
-const (
-	dataPath   = "./test"
-	samplePath = dataPath + "/sample"
-	tmpPath    = dataPath + "/tmp"
 )
 
 type Judger struct {
@@ -37,14 +29,14 @@ type Judger struct {
 	memoryLimit string
 }
 
-func NewJudger(submit *model.Submit) *Judger {
+func NewJudger(submit *Submit) *Judger {
 	return &Judger{
 		codeType:       submit.CodeType,
 		codeSourcePath: submit.CodeSourcePath,
 
 		binPath:   filepath.Join(tmpPath, submit.SubmitId),
 		sampleDir: filepath.Join(samplePath, submit.ProblemId),
-		outputDir: filepath.Join(tmpPath, "output", submit.SubmitId),
+		outputDir: filepath.Join(outputPath, submit.SubmitId),
 
 		timeLimit:   submit.TimeLimit,
 		memoryLimit: submit.MemoryLimit,
@@ -61,31 +53,7 @@ func (judger *Judger) Print() {
 	log.Println("memory limit: ", judger.memoryLimit)
 }
 
-func (judger *Judger) Judge() *[]model.Result {
-	lang, err := judger.newLang()
-	if err != nil {
-		//TODO:
-		log.Println("New Lang failed")
-		return nil
-	}
-
-	var e bytes.Buffer
-	if ok := lang.NeedCompile(); ok {
-		compiler := lang.Compile()
-		compiler.Stdin = os.Stdin
-		compiler.Stdout = os.Stdout
-		compiler.Stderr = &e
-
-		if err := compiler.Run(); err != nil {
-			log.Println("Compile failed")
-			return &[]model.Result{
-				{
-					ErrorInf: e.String(),
-				},
-			}
-		}
-	}
-
+func (judger *Judger) Judge() *[]JudgeResult {
 	sampleCount := 0
 	files, _ := ioutil.ReadDir(judger.sampleDir)
 	for _, fi := range files {
@@ -111,7 +79,7 @@ func (judger *Judger) Judge() *[]model.Result {
 		}
 	}
 
-	result := make([]model.Result, sampleCount)
+	result := make([]JudgeResult, sampleCount)
 	var lock sync.Mutex
 	var wg sync.WaitGroup
 	for i := 0; i < sampleCount/2; i++ {
@@ -130,10 +98,9 @@ func (judger *Judger) Judge() *[]model.Result {
 	return &result
 }
 
-func (judger *Judger) judgerOneByOne(sampleId string) (_result *model.Result) {
+func (judger *Judger) judgerOneByOne(sampleId string) (_result *JudgeResult) {
 
 	runner := exec.Command("./sandbox",
-		"--code_type", "C",
 		"--bin_path", judger.binPath,
 		"--seccomp_rule_name", "general",
 		"--input_path", filepath.Join(judger.sampleDir, strings.Join([]string{sampleId, ".in"}, "")),
@@ -171,13 +138,6 @@ func (judger *Judger) judgerOneByOne(sampleId string) (_result *model.Result) {
 	// log.Println(_result)
 
 	return _result
-}
-
-func (judger *Judger) newLang() (lang.Lang, error) {
-	return lang.NewLang(judger.codeType,
-		judger.codeSourcePath,
-		judger.binPath,
-	)
 }
 
 func (judger *Judger) Compare(sampleId string) bool {
