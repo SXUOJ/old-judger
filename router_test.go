@@ -8,7 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/Sxu-Online-Judge/judger/model"
+	"github.com/Sxu-Online-Judge/judger/judge"
 	"gotest.tools/assert"
 )
 
@@ -27,16 +27,14 @@ func TestPingRoute(t *testing.T) {
 func TestSubmitRouteParameter(t *testing.T) {
 	router := setupRouter()
 
-	params := model.Submit{
+	params := judge.Submit{
 		SubmitId:       "test_1",
 		ProblemId:      "1",
 		ProblemType:    "1",
 		CodeType:       "C",
-		CodeSourcePath: "./test/tmp/main.c",
-		Limit: model.Limit{
-			TimeLimit:   "1000",
-			MemoryLimit: "268435456", // * 1024 * 2014
-		},
+		CodeSourcePath: "test/tmp/main.c",
+		TimeLimit:      "1000",
+		MemoryLimit:    "268435456", // * 1024 * 2014
 	}
 
 	paramsByte, _ := json.Marshal(params)
