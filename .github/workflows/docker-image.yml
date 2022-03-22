@@ -9,17 +9,18 @@ on:
 jobs:
     
   build:
-    env: 
-      TAG: ${{data +%s}}
+  
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag $TAG
-      
-      - name: Login tencentYun
-        run: docker login ccr.ccs.tencentyun.com --username=${secrets.REPO_USERNAME} --password=${secrets.PASSWORD}
-      
-      - name: Push to tencentYun
-        run: docker push judger/judger:$TAG
+      - name: Checkout Dockerfile
+        uses: actions/checkout@v2
+
+      - name: Build and Push Docker Iamge
+        uses: docker/build-push-action@v1
+        with: 
+          registry: ccr.ccs.tencentyun.com
+          username: ${{ secrets.REPO_USERNAME }}
+          password: ${{ secrets.REPO_PASSWORD }}
+          repository: username/repository
+          tag_with_sha: true
