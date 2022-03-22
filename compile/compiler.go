@@ -73,8 +73,6 @@ func (c *Compiler) Run() (_result *CompileResult) {
 	if ok := lang.NeedCompile(); ok {
 		compiler := exec.Command("./sandbox",
 			"--bin_path", lang.Bin(),
-			//TODO: seccomp
-			// "--seccomp_rule_name", "general",
 			"--input_path", c.codeSourcePath,
 			"--real_time_limit", lang.RealTimeLimit(),
 			"--cpu_time_limit", lang.CpuTimeLimit(),
