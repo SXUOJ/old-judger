@@ -10,7 +10,7 @@ jobs:
     
   build:
     env: 
-      TAG: ${data +%s}
+      TAG: ${{data +%s}}
     runs-on: ubuntu-latest
 
     steps:
