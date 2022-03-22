@@ -19,7 +19,7 @@ jobs:
       - name: Build and Push Docker Iamge
         uses: docker/build-push-action@v1
         with: 
-          registry: ${{ secrets.REPO_REGISTRY}}
+          registry: ${{ secrets.REPO_REGISTRY }}
           username: ${{ secrets.REPO_USERNAME }}
           password: ${{ secrets.REPO_PASSWORD }}
           repository: username/repository
