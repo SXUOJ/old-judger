@@ -1,8 +1,9 @@
-run: main.go
-	build && ./judger
+build: Dockerfile
+	docker build . -t judger
 
-build: main.go
-	go build -o judger main.go
+run: 
+	docker run -itd --name judger -p 8080:8080 judger:latest
 
-test:  router_test.go
-	sudo go test
+delete: 
+	docker rm -f judger
+
