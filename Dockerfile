@@ -10,7 +10,7 @@ WORKDIR /build
 
 COPY . .
 
-RUN build -o judger .
+RUN go build -o judger .
 
 FROM ubuntu:20.04
 
