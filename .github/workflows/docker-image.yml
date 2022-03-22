@@ -7,12 +7,19 @@ on:
     branches: [ master ]
 
 jobs:
-
+    
   build:
-
+    env: 
+      TAG: ${data +%s}
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag ${TAG}
+      
+      - name: Login tencentYun
+        run: docker login ccr.ccs.tencentyun.com --username=${secrets.REPO_USERNAME} --password=${secrets.PASSWORD}
+      
+      - name: Push to tencentYun
+        run: docker push judger/judger:${TAG}
