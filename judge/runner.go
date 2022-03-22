@@ -13,10 +13,12 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Sxu-Online-Judge/judger/util"
+	"github.com/isther/judger/compile"
+	"github.com/isther/judger/model"
+	"github.com/isther/judger/util"
 )
 
-type Judger struct {
+type Runner struct {
 	codeType       string
 	codeSourcePath string
 
@@ -29,31 +31,35 @@ type Judger struct {
 	memoryLimit string
 }
 
-func NewJudger(submit *Submit) *Judger {
-	return &Judger{
+type JudgeResult struct {
+	SampleId string `json:"sample_id,omitempty"`
+
+	Result string `json:"status,omitempty"`
+
+	CpuTime  string `json:"cpu_time,omitempty"`
+	RealTime string `json:"real_time,omitempty"`
+	Memory   string `json:"memory,omitempty"`
+
+	Signal string `json:"signal,omitempty"`
+
+	ErrorInf string `json:"msg,omitempty"`
+}
+
+func newRunner(submit *model.Submit) *Runner {
+	return &Runner{
 		codeType:       submit.CodeType,
 		codeSourcePath: submit.CodeSourcePath,
 
-		binPath:   filepath.Join(tmpPath, submit.SubmitId),
-		sampleDir: filepath.Join(samplePath, submit.ProblemId),
-		outputDir: filepath.Join(outputPath, submit.SubmitId),
+		binPath:   filepath.Join(compile.TmpPath, submit.SubmitId),
+		sampleDir: filepath.Join(compile.SamplePath, submit.ProblemId),
+		outputDir: filepath.Join(compile.OutputPath, submit.SubmitId),
 
 		timeLimit:   submit.TimeLimit,
 		memoryLimit: submit.MemoryLimit,
 	}
 }
 
-func (judger *Judger) Print() {
-	log.Println("code type: ", judger.codeType)
-	log.Println("code source path: ", judger.codeSourcePath)
-	log.Println("bin path: ", judger.binPath)
-	log.Println("sample dir: ", judger.sampleDir)
-	log.Println("output dir: ", judger.outputDir)
-	log.Println("time limit: ", judger.timeLimit)
-	log.Println("memory limit: ", judger.memoryLimit)
-}
-
-func (judger *Judger) Judge() *[]JudgeResult {
+func (judger *Runner) Run() *[]JudgeResult {
 	sampleCount := 0
 	files, _ := ioutil.ReadDir(judger.sampleDir)
 	for _, fi := range files {
@@ -72,7 +78,6 @@ func (judger *Judger) Judge() *[]JudgeResult {
 			log.Println("Output dir exists: ", judger.outputDir)
 		} else {
 			if err := os.MkdirAll(judger.outputDir, 0755); err != nil {
-				//TODO:
 				log.Println("Make dir failed")
 				return nil
 			}
@@ -98,7 +103,7 @@ func (judger *Judger) Judge() *[]JudgeResult {
 	return &result
 }
 
-func (judger *Judger) judgerOneByOne(sampleId string) (_result *JudgeResult) {
+func (judger *Runner) judgerOneByOne(sampleId string) (_result *JudgeResult) {
 
 	runner := exec.Command("./sandbox",
 		"--bin_path", judger.binPath,
@@ -140,7 +145,7 @@ func (judger *Judger) judgerOneByOne(sampleId string) (_result *JudgeResult) {
 	return _result
 }
 
-func (judger *Judger) Compare(sampleId string) bool {
+func (judger *Runner) Compare(sampleId string) bool {
 	//TODO: presentation judge
 	outPath := filepath.Join(judger.outputDir, strings.Join([]string{sampleId, ".out"}, ""))
 	ansPath := filepath.Join(judger.sampleDir, strings.Join([]string{sampleId, ".out"}, ""))

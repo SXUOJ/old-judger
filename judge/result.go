@@ -1,38 +1,28 @@
 package judge
 
-type CompileResult struct {
-	Status  string `json:"status,omitempty"`
-	CpuTime string `json:"cpu_time,omitempty"`
-	Memory  string `json:"real_time,omitempty"`
-	Signal  string `json:"signal,omitempty"`
-
-	ErrorInf string `json:"msg,omitempty"`
-}
-
-type JudgeResult struct {
-	SampleId string `json:"sample_id,omitempty"`
-
-	Result string `json:"status,omitempty"`
-
-	CpuTime  string `json:"cpu_time,omitempty"`
-	RealTime string `json:"real_time,omitempty"`
-	Memory   string `json:"memory,omitempty"`
-
-	Signal string `json:"signal,omitempty"`
-
-	ErrorInf string `json:"msg,omitempty"`
-}
-
+// const (
+// 	SUCCEED   = "0"
+// 	StatusAC  = "1"
+// 	StatusWA  = "2"
+// 	StatusCE  = "3"
+// 	StatusRE  = "4"
+// 	StatusTLE = "5"
+// 	StatusMLE = "6"
+// 	StatusOLE = "7"
+// 	StatusPE  = "8"
+// 	StatusSE  = "9"
+// )
 const (
-	StatusAC  = "1"
-	StatusWA  = "2"
-	StatusCE  = "3"
-	StatusRE  = "4"
-	StatusTLE = "5"
-	StatusMLE = "6"
-	StatusOLE = "7"
-	StatusPE  = "8"
-	StatusSE  = "9"
+	SUCCEED   = 0
+	StatusAC  = 1
+	StatusWA  = 2
+	StatusCE  = 3
+	StatusRE  = 4
+	StatusTLE = 5
+	StatusMLE = 6
+	StatusOLE = 7
+	StatusPE  = 8
+	StatusSE  = 9
 )
 
 var judgeStatus = map[string]string{

@@ -8,7 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/Sxu-Online-Judge/judger/judge"
+	"github.com/isther/judger/model"
 	"gotest.tools/assert"
 )
 
@@ -27,7 +27,7 @@ func TestPingRoute(t *testing.T) {
 func TestSubmitRouteParameter(t *testing.T) {
 	router := setupRouter()
 
-	params := judge.Submit{
+	params := model.Submit{
 		SubmitId:       "test_1",
 		ProblemId:      "1",
 		ProblemType:    "1",

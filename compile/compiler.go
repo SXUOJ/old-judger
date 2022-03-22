@@ -1,8 +1,9 @@
-package judge
+package compile
 
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"log"
 	"os"
 	"os/exec"
@@ -11,34 +12,58 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Sxu-Online-Judge/judger/lang"
+	"github.com/isther/judger/model"
 )
 
+var (
+	ERROR_NOT_SUPPORT_LANG = errors.New("This language is not supported")
+)
+
+type CompileResult struct {
+	Status string `json:"status,omitempty"`
+
+	CpuTime  string `json:"cpu_time,omitempty"`
+	RealTime string `json:"real_time,omitempty"`
+	Memory   string `json:"memory,omitempty"`
+
+	Signal   string `json:"signal,omitempty"`
+	ErrorInf string `json:"msg,omitempty"`
+}
+
 type Compiler struct {
-	codeType       string
+	codeType string
+
 	codeSourcePath string
 	binPath        string
 }
 
-func NewCompiler(submit *Submit) *Compiler {
+func NewCompiler(submit *model.Submit) *Compiler {
 	return &Compiler{
 		codeType:       submit.CodeType,
 		codeSourcePath: submit.CodeSourcePath,
-		binPath:        filepath.Join(tmpPath, submit.SubmitId),
+		binPath:        filepath.Join(TmpPath, submit.SubmitId),
 	}
 }
 
 func (c *Compiler) Run() (_result *CompileResult) {
-	lang, err := lang.NewLang(c.codeType, c.codeSourcePath, c.binPath)
+	lang, err := newLang(c.codeType, c.codeSourcePath, c.binPath)
 	if err != nil {
 		log.Println("New Lang failed")
 		return &CompileResult{}
 	}
 
+	if !lang.NeedCompile() {
+		return &CompileResult{
+			Status: strconv.FormatInt(SUCCEED, 10),
+		}
+	}
+
 	info, err := user.Lookup("compiler")
 	if err != nil {
 		log.Println("Lookup failed")
-		return &CompileResult{}
+		return &CompileResult{
+			Status: strconv.FormatInt(LOOKUP_FAILED, 10),
+		}
 	}
 
 	// env := os.Getenv("PATH")
@@ -50,7 +75,7 @@ func (c *Compiler) Run() (_result *CompileResult) {
 			"--bin_path", lang.Bin(),
 			//TODO: seccomp
 			// "--seccomp_rule_name", "general",
-			// "--input_path", c.codeSourcePath,
+			"--input_path", c.codeSourcePath,
 			"--real_time_limit", lang.RealTimeLimit(),
 			"--cpu_time_limit", lang.CpuTimeLimit(),
 			"--max_memory", lang.MemoryLimit(),
@@ -70,10 +95,8 @@ func (c *Compiler) Run() (_result *CompileResult) {
 
 		if err := compiler.Run(); err != nil {
 			log.Println("Compile failed")
-			log.Printf("%s", o.Bytes())
-			log.Printf("%s", e.Bytes())
 			return &CompileResult{
-				Status:   StatusCE,
+				Status:   strconv.FormatInt(COMPILE_FAILED, 10),
 				ErrorInf: strings.Join([]string{o.String(), e.String()}, "\n"),
 			}
 		}

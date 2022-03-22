@@ -1,4 +1,4 @@
-package judge
+package model
 
 type Submit struct {
 	SubmitId string `json:"submit_id"`
