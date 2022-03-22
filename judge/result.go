@@ -1,17 +1,5 @@
 package judge
 
-// const (
-// 	SUCCEED   = "0"
-// 	StatusAC  = "1"
-// 	StatusWA  = "2"
-// 	StatusCE  = "3"
-// 	StatusRE  = "4"
-// 	StatusTLE = "5"
-// 	StatusMLE = "6"
-// 	StatusOLE = "7"
-// 	StatusPE  = "8"
-// 	StatusSE  = "9"
-// )
 const (
 	SUCCEED   = 0
 	StatusAC  = 1
