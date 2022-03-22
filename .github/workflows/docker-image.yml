@@ -22,5 +22,5 @@ jobs:
           registry: ${{ secrets.REPO_REGISTRY }}
           username: ${{ secrets.REPO_USERNAME }}
           password: ${{ secrets.REPO_PASSWORD }}
-          repository: username/repository
+          repository: sxu-oj/judger
           tag_with_sha: true
