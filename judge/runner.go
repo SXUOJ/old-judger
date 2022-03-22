@@ -34,7 +34,7 @@ type Runner struct {
 type JudgeResult struct {
 	SampleId string `json:"sample_id,omitempty"`
 
-	Result string `json:"status,omitempty"`
+	Status string `json:"status,omitempty"`
 
 	CpuTime  string `json:"cpu_time,omitempty"`
 	RealTime string `json:"real_time,omitempty"`
@@ -129,16 +129,21 @@ func (judger *Runner) judgerOneByOne(sampleId string) (_result *JudgeResult) {
 
 	if err := runner.Run(); err != nil {
 		log.Fatal("Error: ", err)
+		_result.Status = strconv.FormatInt(StatusSE, 10)
+		return
 	}
 
-	// log.Printf("Bytes: %s\n", o.Bytes())
 	json.Unmarshal(o.Bytes(), &_result)
 	_result.SampleId = sampleId
+	if _result.Status != strconv.FormatInt(SUCCEED, 10) {
+		_result.Status = GetJudgeStatus(_result.Status)
+		return
+	}
 
 	if ok := judger.Compare(sampleId); ok {
-		_result.Result = "Accept"
+		_result.Status = GetJudgeStatus(strconv.FormatInt(StatusAC, 10))
 	} else {
-		_result.Result = "Wrong Answer"
+		_result.Status = GetJudgeStatus(strconv.FormatInt(StatusWA, 10))
 	}
 	// log.Println(_result)
 
