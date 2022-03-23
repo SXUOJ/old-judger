@@ -2,25 +2,32 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches:
+      - master
+
+env:
+  TKE_IMAGE_URL: ccr.ccs.tencentyun.com/sxu-oj/judger
 
 jobs:
-    
-  build:
-  
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
-
+    environment: production
     steps:
-      - name: Checkout Dockerfile
-        uses: actions/checkout@v2
 
-      - name: Build and Push Docker Iamge
-        uses: docker/build-push-action@v1
-        with: 
-          registry: ${{ secrets.REPO_REGISTRY }}
-          username: ${{ secrets.REPO_USERNAME }}
-          password: ${{ secrets.REPO_PASSWORD }}
-          repository: sxu-oj/judger
-          tag_with_sha: true
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    # Build
+    - name: Build Docker image
+      run: |        
+        docker build -t ${TKE_IMAGE_URL}:${GITHUB_SHA} .
+
+    - name: Login TKE Registry
+      run: |
+        docker login ccr.ccs.tencentyun.com --username=${{ secrets.REPO_USERNAME }} --passowrd='${{ secrets.REPO_PASSWORD  }}'
+
+    # Push the Docker image to TKE Registry
+    - name: Publish
+      run: |
+        docker push ${TKE_IMAGE_URL}:${GITHUB_SHA}
