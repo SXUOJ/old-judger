@@ -31,18 +31,9 @@ type Runner struct {
 	memoryLimit string
 }
 
-type JudgeResult struct {
+type RunResult struct {
 	SampleId string `json:"sample_id,omitempty"`
-
-	Status string `json:"status,omitempty"`
-
-	CpuTime  string `json:"cpu_time,omitempty"`
-	RealTime string `json:"real_time,omitempty"`
-	Memory   string `json:"memory,omitempty"`
-
-	Signal string `json:"signal,omitempty"`
-
-	ErrorInf string `json:"msg,omitempty"`
+	model.Result
 }
 
 func newRunner(submit *model.Submit) *Runner {
@@ -59,7 +50,7 @@ func newRunner(submit *model.Submit) *Runner {
 	}
 }
 
-func (judger *Runner) Run() *[]JudgeResult {
+func (judger *Runner) Run() *[]RunResult {
 	sampleCount := 0
 	files, _ := ioutil.ReadDir(judger.sampleDir)
 	for _, fi := range files {
@@ -84,7 +75,7 @@ func (judger *Runner) Run() *[]JudgeResult {
 		}
 	}
 
-	result := make([]JudgeResult, sampleCount/2)
+	result := make([]RunResult, sampleCount/2)
 	var lock sync.Mutex
 	var wg sync.WaitGroup
 	for i := 0; i < sampleCount/2; i++ {
@@ -103,7 +94,7 @@ func (judger *Runner) Run() *[]JudgeResult {
 	return &result
 }
 
-func (judger *Runner) judgerOneByOne(sampleId string) (_result *JudgeResult) {
+func (judger *Runner) judgerOneByOne(sampleId string) (_result *RunResult) {
 
 	runner := exec.Command("sandbox",
 		"--bin_path", judger.binPath,
