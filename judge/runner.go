@@ -157,8 +157,8 @@ func (judger *Runner) Compare(sampleId string) bool {
 
 	ans := plain(b)
 	out := plain(o)
-	log.Printf("ans:= %s", ans)
-	log.Printf("out:= %s", out)
+	// log.Printf("ans:= %s", ans)
+	// log.Printf("out:= %s", out)
 
 	if out == ans {
 		return true
