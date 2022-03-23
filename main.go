@@ -34,6 +34,7 @@ func setupRouter() *gin.Engine {
 			c.JSON(http.StatusOK, gin.H{
 				"result": compileResult,
 			})
+			return
 		}
 
 		runResult := judger.Runner.Run()
