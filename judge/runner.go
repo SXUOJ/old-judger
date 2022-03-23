@@ -84,7 +84,7 @@ func (judger *Runner) Run() *[]JudgeResult {
 		}
 	}
 
-	result := make([]JudgeResult, sampleCount)
+	result := make([]JudgeResult, sampleCount/2)
 	var lock sync.Mutex
 	var wg sync.WaitGroup
 	for i := 0; i < sampleCount/2; i++ {
