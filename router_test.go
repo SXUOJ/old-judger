@@ -32,7 +32,7 @@ func TestSubmitRouteParameter(t *testing.T) {
 		ProblemId:      "1",
 		ProblemType:    "1",
 		CodeType:       "C",
-		CodeSourcePath: "test/tmp/main.c",
+		CodeSourcePath: "/sxu-judger/code/main.c",
 		TimeLimit:      "1000",
 		MemoryLimit:    "268435456", // * 1024 * 2014
 	}
