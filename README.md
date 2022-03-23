@@ -12,6 +12,7 @@
 
 ```
 | work_dir
+|-- run
 |-- sample
-|-- tmp
+|-- output
 ```
