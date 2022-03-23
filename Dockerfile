@@ -18,7 +18,8 @@ RUN apt-get update && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     apt-get purge -y --auto-remove cmake git 
 
-RUN mkdir -p /tmp/run && chown compiler /tmp/run && chmod 711 /tmp/run
+RUN mkdir /sxu-judger && mkdir /sxu-judger/run && mkdir /sxu-judger/output && mkdir /sxu-judger/sample && \
+    chown compiler /sxu-judger/run 
 
 EXPOSE 8080
 
