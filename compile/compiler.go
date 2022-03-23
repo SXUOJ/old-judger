@@ -85,7 +85,7 @@ func (c *Compiler) Run() (_result *CompileResult) {
 			"--gid", info.Gid,
 		)
 
-		log.Println(compiler.Args)
+		// log.Println(compiler.Args)
 
 		compiler.Stdin = os.Stdin
 		compiler.Stdout = &o
