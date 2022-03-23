@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     GOOS=linux \
     GOARCH=amd64
 
-RUN sed -E -i -e 's/(archive|ports).ubuntu.com/mirrors.aliyun.com/g' -e '/security.ubuntu.com/d' /etc/apt/sources.list
+# RUN sed -E -i -e 's/(archive|ports).ubuntu.com/mirrors.aliyun.com/g' -e '/security.ubuntu.com/d' /etc/apt/sources.list
 RUN apt-get update && \
     apt-get -y install git cmake gcc golang-go libseccomp-dev && \
     git clone https://github.com/isther/sandbox.git /tmp/sandbox && \

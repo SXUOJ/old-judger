@@ -23,7 +23,7 @@ jobs:
       run: |        
         docker build -t ${TKE_IMAGE_URL}:${GITHUB_SHA} .
 
-    - name: Login TKE Registry
+    - name: Login TCR Registry
       run: |
         docker login ccr.ccs.tencentyun.com --username=${{ secrets.REPO_USERNAME }} --passowrd='${{ secrets.REPO_PASSWORD  }}'
 
