@@ -1,0 +1,12 @@
+version: "3"
+services:
+  judger:
+    image: ccr.ccs.tencentyun.com/sxu-oj/judger
+    tmpfs:
+      - /tmp
+    volumes:
+      - $PWD/log:/sxu-judger/log
+      - $PWD/code:/sxu-judger/code
+      - $PWD/sample:/sxu-judger/sample
+    ports:
+      - "0.0.0.0:8080:8080"
