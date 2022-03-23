@@ -71,7 +71,7 @@ func (c *Compiler) Run() (_result *CompileResult) {
 	var o bytes.Buffer
 	var e bytes.Buffer
 	if ok := lang.NeedCompile(); ok {
-		compiler := exec.Command("./sandbox",
+		compiler := exec.Command("sandbox",
 			"--bin_path", lang.Bin(),
 			"--input_path", c.codeSourcePath,
 			"--real_time_limit", lang.RealTimeLimit(),

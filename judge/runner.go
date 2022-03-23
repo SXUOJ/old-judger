@@ -105,7 +105,7 @@ func (judger *Runner) Run() *[]JudgeResult {
 
 func (judger *Runner) judgerOneByOne(sampleId string) (_result *JudgeResult) {
 
-	runner := exec.Command("./sandbox",
+	runner := exec.Command("sandbox",
 		"--bin_path", judger.binPath,
 		"--seccomp_rule_name", "general",
 		"--input_path", filepath.Join(judger.sampleDir, strings.Join([]string{sampleId, ".in"}, "")),
