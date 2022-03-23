@@ -75,7 +75,7 @@ func (judger *Runner) Run() *[]RunResult {
 		}
 	}
 
-	result := make([]RunResult, sampleCount/2)
+	result := make([]RunResult, 0, sampleCount/2)
 	var lock sync.Mutex
 	var wg sync.WaitGroup
 	for i := 0; i < sampleCount/2; i++ {
@@ -95,7 +95,6 @@ func (judger *Runner) Run() *[]RunResult {
 }
 
 func (judger *Runner) judgerOneByOne(sampleId string) (_result *RunResult) {
-
 	runner := exec.Command("sandbox",
 		"--bin_path", judger.binPath,
 		"--seccomp_rule_name", "general",
