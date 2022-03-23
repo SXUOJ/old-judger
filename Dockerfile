@@ -14,6 +14,7 @@ RUN apt-get update && \
     git clone https://github.com/isther/judger.git /tmp/judger &&\
     cd /tmp/sandbox && mkdir build && cd build && cmake .. && make && cp sandbox /bin &&\ 
     cd /tmp/judger && go build -o /judger &&\ 
+    rm -rf /tmp/sandbox /tmp/judger && \
     useradd -u 11001 compiler && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     apt-get purge -y --auto-remove cmake git 
