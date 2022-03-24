@@ -15,7 +15,7 @@ RUN apt-get update && \
     cd /tmp/sandbox && mkdir build && cd build && cmake .. && make && cp sandbox /bin &&\ 
     cd /tmp/judger && go build -o /judger &&\ 
     rm -rf /tmp/sandbox /tmp/judger && \
-    useradd -u 11001 compiler && \
+    useradd -u 11001 compiler && useradd -u 11002 runner && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     apt-get purge -y --auto-remove cmake git 
 
