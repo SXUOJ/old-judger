@@ -20,13 +20,13 @@ jobs:
       # Build
       - name: Build Docker image
         run: |
-          docker build -t ${TCR_IMAGE_URL}:latest .
+          docker build -t ${TCR_IMAGE_URL}:${GITHUB_SHA} .
 
-      - name: Login TCR Registry
-        run: |
-          docker login ccr.ccs.tencentyun.com --username=${{ secrets.REPO_USERNAME }} --password='${{ secrets.REPO_PASSWORD  }}'
+      #- name: Login TCR Registry
+        #run: |
+        #  docker login ccr.ccs.tencentyun.com --username=${{ secrets.REPO_USERNAME }} --password='${{ secrets.REPO_PASSWORD  }}'
 
       # Push the Docker image to TCR Registry
-      - name: Publish
-        run: |
-          docker push ${TCR_IMAGE_URL}:latest
+      #- name: Publish
+       # run: |
+         # docker push ${TCR_IMAGE_URL}:${GITHUB_SHA}
