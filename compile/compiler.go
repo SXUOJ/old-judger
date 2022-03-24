@@ -3,7 +3,6 @@ package compile
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"log"
 	"os"
 	"os/exec"
@@ -12,11 +11,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/isther/judger/lang"
 	"github.com/isther/judger/model"
-)
-
-var (
-	ERROR_NOT_SUPPORT_LANG = errors.New("This language is not supported")
 )
 
 // CompileResult
@@ -38,7 +34,7 @@ func NewCompiler(submit *model.Submit) *Compiler {
 }
 
 func (c *Compiler) Run() (_result *CompileResult) {
-	lang, err := newLang(c.codeType, c.codeSourcePath, c.binPath)
+	lang, err := lang.NewLang(c.codeType, c.codeSourcePath, c.binPath)
 	if err != nil {
 		log.Println("New Lang failed")
 		return &CompileResult{}
