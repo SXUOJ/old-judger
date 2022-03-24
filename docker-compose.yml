@@ -1,7 +1,9 @@
 version: "3"
 services:
   judger:
+    container_name: judger
     image: ccr.ccs.tencentyun.com/sxu-oj/judger
+    restart: always
     tmpfs:
       - /tmp
     volumes:
