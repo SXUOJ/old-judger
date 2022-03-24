@@ -6,6 +6,7 @@ on:
       - master
 
 env:
+  REPO_URL: ccr.ccs.tencentyun.com
   TCR_IMAGE_URL: ccr.ccs.tencentyun.com/sxu-oj/judger
 
 jobs:
@@ -24,7 +25,7 @@ jobs:
 
       - name: Login TCR Registry
         run: |
-         docker login ccr.ccs.tencentyun.com --username=${{ secrets.REPO_USERNAME }} --password='${{ secrets.REPO_PASSWORD  }}'
+         docker login ${REPO_URL} --username=${{ secrets.REPO_USERNAME }} --password='${{ secrets.REPO_PASSWORD  }}'
 
       # Push the Docker image to TCR Registry
       - name: Publish
