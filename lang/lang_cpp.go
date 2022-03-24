@@ -1,34 +1,31 @@
-package compile
+package lang
 
 import (
 	"strconv"
 	"strings"
 )
 
-type Cpp struct {
-	lang
-}
+type Cpp lang
 
 func newCpp(sourcePath, binaryPath string) *Cpp {
 	return &Cpp{
-		lang{
-			bin: "/usr/bin/g++",
-			args: strings.Join([]string{
-				"-o",
-				binaryPath,
-				sourcePath,
-				"-fmax-errors=3",
-				"-std=c11",
-				"-lm",
-				"-w",
-				"-O2",
-				"-DONLINE_JUDGE",
-				"",
-			}, "&"),
-			real_time_limit: "5000",
-			cpu_time_limit:  "3000",
-			memory_limit:    strconv.FormatInt(128*1024*1024, 10),
-		},
+		bin: "/usr/bin/g++",
+		args: strings.Join([]string{
+			"-o",
+			binaryPath,
+			sourcePath,
+			"-fmax-errors=3",
+			"-std=c11",
+			"-lm",
+			"-w",
+			"-O2",
+			"-DONLINE_JUDGE",
+			"",
+		}, "&"),
+		real_time_limit: "5000",
+		cpu_time_limit:  "3000",
+		memory_limit:    strconv.FormatInt(128*1024*1024, 10),
+		runCmd:          binaryPath,
 	}
 }
 
@@ -54,4 +51,8 @@ func (c *Cpp) CpuTimeLimit() string {
 
 func (c *Cpp) MemoryLimit() string {
 	return c.memory_limit
+}
+
+func (c *Cpp) RunCmd() string {
+	return c.runCmd
 }

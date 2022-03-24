@@ -1,4 +1,6 @@
-package compile
+package lang
+
+import "errors"
 
 const (
 	_ = iota
@@ -10,6 +12,10 @@ const (
 	LangPython3
 )
 
+var (
+	ERROR_NOT_SUPPORT_LANG = errors.New("This language is not supported")
+)
+
 type lang struct {
 	bin  string
 	args string
@@ -17,8 +23,11 @@ type lang struct {
 	real_time_limit string
 	cpu_time_limit  string
 	memory_limit    string
+
+	runCmd string
 }
 
+// Lang: compile parameters
 type Lang interface {
 	NeedCompile() bool
 
@@ -27,9 +36,11 @@ type Lang interface {
 	RealTimeLimit() string
 	CpuTimeLimit() string
 	MemoryLimit() string
+
+	RunCmd() string
 }
 
-func newLang(langType, sourcePath, binaryPath string) (Lang, error) {
+func NewLang(langType, sourcePath, binaryPath string) (Lang, error) {
 	switch langType {
 	case "C":
 		return newC(sourcePath, binaryPath), nil

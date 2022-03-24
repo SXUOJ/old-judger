@@ -1,18 +1,11 @@
-package compile
+package lang
 
 import (
 	"strconv"
 	"strings"
 )
 
-type C struct {
-	bin  string
-	args string
-
-	real_time_limit string
-	cpu_time_limit  string
-	memory_limit    string
-}
+type C lang
 
 func newC(sourcePath, binaryPath string) *C {
 	return &C{
@@ -32,6 +25,7 @@ func newC(sourcePath, binaryPath string) *C {
 		real_time_limit: "5000",
 		cpu_time_limit:  "3000",
 		memory_limit:    strconv.FormatInt(128*1024*1024, 10),
+		runCmd:          binaryPath,
 	}
 }
 
@@ -57,4 +51,8 @@ func (c *C) CpuTimeLimit() string {
 
 func (c *C) MemoryLimit() string {
 	return c.memory_limit
+}
+
+func (c *C) RunCmd() string {
+	return c.runCmd
 }
