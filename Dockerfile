@@ -1,8 +1,8 @@
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    GO111MODULE=on \
-    GOPROXY=https://goproxy.cn,direct\ 
+    # GO111MODULE=on \
+    # GOPROXY=https://goproxy.cn,direct\ 
     CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64
