@@ -6,8 +6,7 @@ type Submit struct {
 	ProblemId   string `json:"problem_id"`
 	ProblemType string `json:"problem_type"`
 
-	CodeType       string `json:"code_type"`
-	CodeSourcePath string `json:"code_source_path"`
+	CodeType string `json:"code_type"`
 
 	TimeLimit   string `json:"time_limit"`
 	MemoryLimit string `json:"memory_limit"`
