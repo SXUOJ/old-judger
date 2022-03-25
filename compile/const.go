@@ -2,6 +2,7 @@ package compile
 
 const (
 	BasePath   = "/sxu-judger"
+	CodePath   = BasePath + "/code"
 	TmpPath    = BasePath + "/run"
 	OutputPath = BasePath + "/output"
 	SamplePath = BasePath + "/sample"
