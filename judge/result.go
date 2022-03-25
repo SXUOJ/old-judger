@@ -1,7 +1,6 @@
 package judge
 
 const (
-	SUCCEED   = 0
 	StatusAC  = 1
 	StatusWA  = 2
 	StatusCE  = 3
