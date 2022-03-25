@@ -28,8 +28,8 @@ func TestSubmitRouteParameter(t *testing.T) {
 	router := setupRouter()
 
 	params := model.Submit{
-		SubmitId:    "SXU001",
-		ProblemId:   "SXU001",
+		SubmitId:    "TEST001",
+		ProblemId:   "TEST001",
 		ProblemType: "1",
 		CodeType:    "C",
 		TimeLimit:   "1000",
