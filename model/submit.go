@@ -8,6 +8,8 @@ type Submit struct {
 
 	CodeType string `json:"code_type"`
 
+	CodeSourceName string `json:"code_source_name"`
+
 	TimeLimit   string `json:"time_limit"`
 	MemoryLimit string `json:"memory_limit"`
 }
