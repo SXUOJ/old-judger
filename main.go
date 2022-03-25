@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/isther/judger/compile"
 	"github.com/isther/judger/judge"
 	"github.com/isther/judger/model"
 )
@@ -29,7 +28,7 @@ func setupRouter() *gin.Engine {
 
 		judger := judge.NewJudger(&submit)
 		compileResult := judger.Compiler.Run()
-		if compileResult.Status != strconv.FormatInt(compile.SUCCEED, 10) {
+		if compileResult.Status != strconv.FormatInt(judge.SUCCEED, 10) {
 			compileResult.Status = judge.GetJudgeStatus(strconv.FormatInt(judge.StatusCE, 10))
 			c.JSON(http.StatusOK, gin.H{
 				"result": compileResult,
