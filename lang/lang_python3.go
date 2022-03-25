@@ -9,8 +9,8 @@ type Python3 struct {
 	args string
 }
 
-func newPython3(sourcePath, binaryPath string) *C {
-	return &C{
+func newPython3(sourcePath, binaryPath string) *Python3 {
+	return &Python3{
 		bin: "/usr/bin/python3",
 		args: strings.Join([]string{
 			sourcePath,
@@ -28,4 +28,16 @@ func (python3 *Python3) Bin() string {
 
 func (python3 *Python3) Args() string {
 	return python3.args
+}
+
+func (python *Python3) RealTimeLimit() string {
+	return ""
+}
+
+func (python *Python3) CpuTimeLimit() string {
+	return ""
+}
+
+func (python *Python3) MemoryLimit() string {
+	return ""
 }

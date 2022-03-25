@@ -9,8 +9,8 @@ type Python2 struct {
 	args string
 }
 
-func newPython2(sourcePath, binaryPath string) *C {
-	return &C{
+func newPython2(sourcePath, binaryPath string) *Python2 {
+	return &Python2{
 		bin: "/usr/bin/python",
 		args: strings.Join([]string{
 			sourcePath,
@@ -28,4 +28,16 @@ func (python2 *Python2) Bin() string {
 
 func (python2 *Python2) Args() string {
 	return python2.args
+}
+
+func (python *Python2) RealTimeLimit() string {
+	return ""
+}
+
+func (python *Python2) CpuTimeLimit() string {
+	return ""
+}
+
+func (python *Python2) MemoryLimit() string {
+	return ""
 }

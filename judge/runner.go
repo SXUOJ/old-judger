@@ -13,16 +13,14 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/isther/judger/compile"
+	"github.com/isther/judger/lang"
 	"github.com/isther/judger/model"
 	"github.com/isther/judger/util"
 )
 
 type Runner struct {
-	codeType       string
-	codeSourcePath string
-
 	binPath string
+	args    string
 
 	sampleDir string
 	outputDir string
@@ -37,22 +35,29 @@ type RunResult struct {
 }
 
 func newRunner(submit *model.Submit) *Runner {
-	return &Runner{
-		codeType:       submit.CodeType,
-		codeSourcePath: submit.CodeSourcePath,
-
-		binPath:   filepath.Join(compile.TmpPath, submit.SubmitId),
-		sampleDir: filepath.Join(compile.SamplePath, submit.ProblemId),
-		outputDir: filepath.Join(compile.OutputPath, submit.SubmitId),
+	runner := &Runner{
+		sampleDir: filepath.Join(SamplePath, submit.ProblemId),
+		outputDir: filepath.Join(OutputPath, submit.SubmitId),
 
 		timeLimit:   submit.TimeLimit,
 		memoryLimit: submit.MemoryLimit,
 	}
+
+	lang, _ := lang.NewLang(submit.CodeType, "", "")
+	if lang.NeedCompile() {
+		runner.binPath = filepath.Join(TmpPath, submit.SubmitId)
+		runner.args = ""
+	} else {
+		runner.binPath = lang.Bin()
+		runner.args = lang.Args()
+	}
+
+	return runner
 }
 
-func (judger *Runner) Run() *[]RunResult {
+func (runner *Runner) Run() *[]RunResult {
 	sampleCount := 0
-	files, _ := ioutil.ReadDir(judger.sampleDir)
+	files, _ := ioutil.ReadDir(runner.sampleDir)
 	for _, fi := range files {
 		if fi.IsDir() {
 			continue
@@ -62,13 +67,13 @@ func (judger *Runner) Run() *[]RunResult {
 	}
 
 	// log.Println("sample count: ", sampleCount)
-	if ok, err := util.PathExists(judger.outputDir); err != nil {
+	if ok, err := util.PathExists(runner.outputDir); err != nil {
 		log.Println("Check if path exists failed")
 	} else {
 		if ok {
-			log.Println("Output dir exists: ", judger.outputDir)
+			log.Println("Output dir exists: ", runner.outputDir)
 		} else {
-			if err := os.MkdirAll(judger.outputDir, 0755); err != nil {
+			if err := os.MkdirAll(runner.outputDir, 0755); err != nil {
 				log.Println("Make dir failed")
 				return nil
 			}
@@ -82,7 +87,7 @@ func (judger *Runner) Run() *[]RunResult {
 		wg.Add(1)
 		go func(id int) {
 			sampleId := strconv.FormatInt(int64(id), 10)
-			_result := judger.judgerOneByOne(sampleId)
+			_result := runner.judgerOneByOne(sampleId)
 
 			lock.Lock()
 			result = append(result, *_result)
@@ -94,30 +99,31 @@ func (judger *Runner) Run() *[]RunResult {
 	return &result
 }
 
-func (judger *Runner) judgerOneByOne(sampleId string) (_result *RunResult) {
-	runner := exec.Command("sandbox",
-		"--bin_path", judger.binPath,
+func (runner *Runner) judgerOneByOne(sampleId string) (_result *RunResult) {
+	runnerByOne := exec.Command("sandbox",
+		"--bin_path", runner.binPath,
+		"--args", runner.args,
 		"--seccomp_rule_name", "general",
-		"--input_path", filepath.Join(judger.sampleDir, strings.Join([]string{sampleId, ".in"}, "")),
-		"--output_path", filepath.Join(judger.outputDir, strings.Join([]string{sampleId, ".out"}, "")),
+		"--input_path", filepath.Join(runner.sampleDir, strings.Join([]string{sampleId, ".in"}, "")),
+		"--output_path", filepath.Join(runner.outputDir, strings.Join([]string{sampleId, ".out"}, "")),
 		// "--error_path ",
 		// "--log_path",
-		"--real_time_limit", judger.timeLimit,
-		"--cpu_time_limit", judger.timeLimit,
-		"--max_memory", judger.memoryLimit,
+		"--real_time_limit", runner.timeLimit,
+		"--cpu_time_limit", runner.timeLimit,
+		"--max_memory", runner.memoryLimit,
 		// "--max_stack", "",
 		// "--max_output_size", "",
 		// "--max_process_number", "",
 	)
 
 	var o bytes.Buffer
-	runner.Stdin = os.Stdin
-	runner.Stdout = &o
-	runner.Stderr = os.Stderr
+	runnerByOne.Stdin = os.Stdin
+	runnerByOne.Stdout = &o
+	runnerByOne.Stderr = os.Stderr
 
 	// log.Println(runner.Args)
 
-	if err := runner.Run(); err != nil {
+	if err := runnerByOne.Run(); err != nil {
 		log.Fatal("Error: ", err)
 		_result.Status = strconv.FormatInt(StatusSE, 10)
 		return
@@ -130,7 +136,7 @@ func (judger *Runner) judgerOneByOne(sampleId string) (_result *RunResult) {
 		return
 	}
 
-	if ok := judger.Compare(sampleId); ok {
+	if ok := runner.Compare(sampleId); ok {
 		_result.Status = GetJudgeStatus(strconv.FormatInt(StatusAC, 10))
 	} else {
 		_result.Status = GetJudgeStatus(strconv.FormatInt(StatusWA, 10))
@@ -140,10 +146,10 @@ func (judger *Runner) judgerOneByOne(sampleId string) (_result *RunResult) {
 	return _result
 }
 
-func (judger *Runner) Compare(sampleId string) bool {
+func (runner *Runner) Compare(sampleId string) bool {
 	//TODO: presentation judge
-	outPath := filepath.Join(judger.outputDir, strings.Join([]string{sampleId, ".out"}, ""))
-	ansPath := filepath.Join(judger.sampleDir, strings.Join([]string{sampleId, ".out"}, ""))
+	outPath := filepath.Join(runner.outputDir, strings.Join([]string{sampleId, ".out"}, ""))
+	ansPath := filepath.Join(runner.sampleDir, strings.Join([]string{sampleId, ".out"}, ""))
 
 	b, err := ioutil.ReadFile(ansPath)
 	if err != nil {
