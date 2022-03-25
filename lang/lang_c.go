@@ -52,7 +52,3 @@ func (c *C) CpuTimeLimit() string {
 func (c *C) MemoryLimit() string {
 	return c.memory_limit
 }
-
-func (c *C) RunCmd() string {
-	return c.runCmd
-}

@@ -36,8 +36,6 @@ type Lang interface {
 	RealTimeLimit() string
 	CpuTimeLimit() string
 	MemoryLimit() string
-
-	RunCmd() string
 }
 
 func NewLang(langType, sourcePath, binaryPath string) (Lang, error) {
