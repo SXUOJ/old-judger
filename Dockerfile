@@ -11,16 +11,17 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN apt-get update && \
     apt-get -y install git cmake gcc golang-go libseccomp-dev && \
     git clone https://github.com/isther/sandbox.git /tmp/sandbox && \
-    git clone https://github.com/isther/judger.git /tmp/judger &&\
-    cd /tmp/sandbox && mkdir build && cd build && cmake .. && make && cp sandbox /bin &&\ 
-    cd /tmp/judger && go build -o /judger &&\ 
-    rm -rf /tmp/sandbox /tmp/judger && \
+    git clone https://github.com/isther/judger.git /tmp/judger && \
+    cd /tmp/sandbox && mkdir build && cd build && cmake .. && make && cp sandbox /bin && \ 
+    cd /tmp/judger && go build -o /judger && \ 
     useradd -u 11001 compiler && useradd -u 11002 runner && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     apt-get purge -y --auto-remove cmake git 
 
-RUN mkdir /sxu-judger && mkdir /sxu-judger/run && mkdir /sxu-judger/output && mkdir /sxu-judger/sample && \
-    chown compiler /sxu-judger/run 
+RUN mkdir /sxu-judger && mkdir /sxu-judger/code && mkdir /sxu-judger/run && mkdir /sxu-judger/output && mkdir /sxu-judger/sample && \
+    cp /tmp/judger/test/TEST001 /sxu-judger/sample && cp /tmp/judger/test/TEST001.c /sxu-judger/code && \
+    chown compiler /sxu-judger/run && \
+    rm -rf /tmp/sandbox /tmp/judger 
 
 EXPOSE 8080
 
