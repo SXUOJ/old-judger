@@ -28,7 +28,7 @@ type Compiler struct {
 func newCompiler(submit *model.Submit) *Compiler {
 	return &Compiler{
 		codeType:       submit.CodeType,
-		codeSourcePath: filepath.Join(CodePath, submit.SubmitId),
+		codeSourcePath: filepath.Join(CodePath, submit.CodeSourceName),
 		binPath:        filepath.Join(TmpPath, submit.SubmitId),
 	}
 }
@@ -40,11 +40,17 @@ func (c *Compiler) Run() (_result *CompileResult) {
 		return &CompileResult{}
 	}
 
-	if !lang.NeedCompile() {
-		return &CompileResult{
-			Status: strconv.FormatInt(SUCCEED, 10),
-		}
-	}
+	// if !lang.NeedCompile() {
+	// compiler := exec.Command("cp", c.codeSourcePath, c.binPath)
+	// if compiler.Run() != nil {
+	// 	return &CompileResult{
+	// 		Status: strconv.FormatInt(StatusCE, 10),
+	// 	}
+	// }
+	// return &CompileResult{
+	// Status: strconv.FormatInt(SUCCEED, 10),
+	// }
+	// }
 
 	info, err := user.Lookup("compiler")
 	if err != nil {
@@ -53,40 +59,38 @@ func (c *Compiler) Run() (_result *CompileResult) {
 			Status: strconv.FormatInt(LOOKUP_FAILED, 10),
 		}
 	}
-
-	// env := os.Getenv("PATH")
-
 	var o bytes.Buffer
 	var e bytes.Buffer
-	if ok := lang.NeedCompile(); ok {
-		compiler := exec.Command("sandbox",
-			"--bin_path", lang.Bin(),
-			"--input_path", c.codeSourcePath,
-			"--real_time_limit", lang.RealTimeLimit(),
-			"--cpu_time_limit", lang.CpuTimeLimit(),
-			"--max_memory", lang.MemoryLimit(),
-			"--max_stack", strconv.FormatInt(128*1024*1024, 10),
-			"--max_output_size", strconv.FormatInt(20*1024*1024, 10),
-			"--args", lang.Args(),
-			// "--env", env,
-			"--uid", info.Uid,
-			"--gid", info.Gid,
-		)
 
-		// log.Println(compiler.Args)
+	// env := os.Getenv("PATH")
+	compiler := exec.Command("sandbox",
+		"--bin_path", lang.CompileBin(),
+		"--input_path", c.codeSourcePath,
+		"--real_time_limit", lang.RealTimeLimit(),
+		"--cpu_time_limit", lang.CpuTimeLimit(),
+		"--max_memory", lang.MemoryLimit(),
+		"--max_stack", strconv.FormatInt(128*1024*1024, 10),
+		"--max_output_size", strconv.FormatInt(20*1024*1024, 10),
+		"--args", lang.CompileArgs(),
+		// "--env", env,
+		"--uid", info.Uid,
+		"--gid", info.Gid,
+	)
 
-		compiler.Stdin = os.Stdin
-		compiler.Stdout = &o
-		compiler.Stderr = &e
+	// log.Println(compiler.Args)
 
-		if err := compiler.Run(); err != nil {
-			log.Println("Compile failed")
-			return &CompileResult{
-				Status:   strconv.FormatInt(COMPILE_FAILED, 10),
-				ErrorInf: strings.Join([]string{o.String(), e.String()}, "\n"),
-			}
+	compiler.Stdin = os.Stdin
+	compiler.Stdout = &o
+	compiler.Stderr = &e
+
+	if err := compiler.Run(); err != nil {
+		log.Println("Compile failed")
+		return &CompileResult{
+			Status:   strconv.FormatInt(COMPILE_FAILED, 10),
+			ErrorInf: strings.Join([]string{o.String(), e.String()}, "\n"),
 		}
 	}
+	log.Println(o.String(), e.String())
 	json.Unmarshal(o.Bytes(), &_result)
 	return _result
 }

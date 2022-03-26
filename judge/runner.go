@@ -19,8 +19,8 @@ import (
 )
 
 type Runner struct {
-	binPath string
-	args    string
+	codeType   string
+	binaryPath string
 
 	sampleDir string
 	outputDir string
@@ -35,24 +35,15 @@ type RunResult struct {
 }
 
 func newRunner(submit *model.Submit) *Runner {
-	runner := &Runner{
-		sampleDir: filepath.Join(SamplePath, submit.ProblemId),
-		outputDir: filepath.Join(OutputPath, submit.SubmitId),
+	return &Runner{
+		codeType:   submit.CodeType,
+		binaryPath: filepath.Join(TmpPath, submit.SubmitId),
+		sampleDir:  filepath.Join(SamplePath, submit.ProblemId),
+		outputDir:  filepath.Join(OutputPath, submit.SubmitId),
 
 		timeLimit:   submit.TimeLimit,
 		memoryLimit: submit.MemoryLimit,
 	}
-
-	lang, _ := lang.NewLang(submit.CodeType, "", "")
-	if lang.NeedCompile() {
-		runner.binPath = filepath.Join(TmpPath, submit.SubmitId)
-		runner.args = ""
-	} else {
-		runner.binPath = lang.Bin()
-		runner.args = lang.Args()
-	}
-
-	return runner
 }
 
 func (runner *Runner) Run() *[]RunResult {
@@ -100,9 +91,20 @@ func (runner *Runner) Run() *[]RunResult {
 }
 
 func (runner *Runner) judgerOneByOne(sampleId string) (_result *RunResult) {
+	lang, err := lang.NewLang(runner.codeType, "", runner.binaryPath)
+	if err != nil {
+		log.Println("New lang failed")
+		return &RunResult{
+			SampleId: sampleId,
+			Result: model.Result{
+				Status: GetJudgeStatus(strconv.FormatInt(StatusSE, 10)),
+			},
+		}
+	}
+
 	runnerByOne := exec.Command("sandbox",
-		"--bin_path", runner.binPath,
-		"--args", runner.args,
+		"--bin_path", lang.RunBin(),
+		"--args", lang.RunArgs(),
 		"--seccomp_rule_name", "general",
 		"--input_path", filepath.Join(runner.sampleDir, strings.Join([]string{sampleId, ".in"}, "")),
 		"--output_path", filepath.Join(runner.outputDir, strings.Join([]string{sampleId, ".out"}, "")),
