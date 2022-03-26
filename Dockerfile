@@ -19,7 +19,7 @@ RUN apt-get update && \
     apt-get purge -y --auto-remove cmake git 
 
 RUN mkdir /sxu-judger && mkdir /sxu-judger/run && mkdir /sxu-judger/output && \
-    cp -r /tmp/judger/test/code /sxu-judger /tmp/judger/test/sample /sxu-judger && \
+    cp -r /tmp/judger/test/code /tmp/judger/test/sample /sxu-judger && \
     chown compiler /sxu-judger/run 
 
 RUN rm -rf /tmp/sandbox /tmp/judger 
