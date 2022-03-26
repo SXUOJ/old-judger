@@ -16,26 +16,32 @@ var (
 	ERROR_NOT_SUPPORT_LANG = errors.New("This language is not supported")
 )
 
-type lang struct {
+type compilerConfig struct {
 	bin  string
 	args string
 
 	real_time_limit string
 	cpu_time_limit  string
 	memory_limit    string
+}
 
-	runCmd string
+type runnerConfig struct {
+	bin  string
+	args string
 }
 
 // Lang: compile parameters
 type Lang interface {
 	NeedCompile() bool
 
-	Bin() string
-	Args() string
+	CompileBin() string
+	CompileArgs() string
 	RealTimeLimit() string
 	CpuTimeLimit() string
 	MemoryLimit() string
+
+	RunBin() string
+	RunArgs() string
 }
 
 func NewLang(langType, sourcePath, binaryPath string) (Lang, error) {
