@@ -27,6 +27,7 @@ func TestPingRoute(t *testing.T) {
 func TestSubmitRouteParameter(t *testing.T) {
 	router := setupRouter()
 
+	//TODO: To test more type of language
 	params := model.Submit{
 		SubmitId:       "SubmitID1",
 		ProblemId:      "TEST001",
