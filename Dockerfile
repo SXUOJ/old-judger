@@ -15,8 +15,8 @@ RUN apt-get update && \
     cd /tmp/sandbox && mkdir build && cd build && cmake .. && make && cp sandbox /bin && \ 
     cd /tmp/judger && go build -o /judger && \ 
     rm -rf /tmp/sandbox /tmp/judger && \ 
-    apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    apt-get purge -y --auto-remove cmake git 
+    apt-get purge -y --auto-remove cmake git && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -u 11001 compiler && useradd -u 11002 runner && \
     mkdir /sxu-judger && \
