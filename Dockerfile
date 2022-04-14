@@ -13,7 +13,7 @@ RUN apt-get update && \
     git clone https://github.com/isther/sandbox.git /tmp/sandbox && \
     cd /tmp/sandbox && mkdir build && cd build && cmake .. && make && cp sandbox /bin && \ 
     git clone git@github.com:SXUOJ/judger.git /tmp/judger && \
-    cd /tmp/judger && git checkout master && go build -o /judger && \ 
+    cd /tmp/judger && git checkout old && go build -o /judger && \ 
     rm -rf /tmp/sandbox /tmp/judger && \ 
     apt-get purge -y --auto-remove cmake git && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
