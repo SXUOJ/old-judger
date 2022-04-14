@@ -24,6 +24,6 @@ RUN useradd -u 11001 compiler && useradd -u 11002 runner && \
     mkdir /sxu-judger/run && mkdir /sxu-judger/output && \
     chown compiler /sxu-judger/run 
 
-EXPOSE 8080
+EXPOSE 9000
 
 ENTRYPOINT ["/judger"]

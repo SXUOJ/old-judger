@@ -11,4 +11,4 @@ services:
       - $PWD/code:/sxu-judger/code
       - $PWD/sample:/sxu-judger/sample
     ports:
-      - "0.0.0.0:9000:8080"
+      - "0.0.0.0:9000:9000"
