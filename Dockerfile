@@ -11,9 +11,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN apt-get update && \
     apt-get -y install git cmake gcc golang-go libseccomp-dev && \
     git clone https://github.com/isther/sandbox.git /tmp/sandbox && \
-    git clone https://github.com/isther/judger.git /tmp/judger && \
     cd /tmp/sandbox && mkdir build && cd build && cmake .. && make && cp sandbox /bin && \ 
-    cd /tmp/judger && go build -o /judger && \ 
+    git clone git@github.com:SXUOJ/judger.git /tmp/judger && \
+    cd /tmp/judger && git checkout master && go build -o /judger && \ 
     rm -rf /tmp/sandbox /tmp/judger && \ 
     apt-get purge -y --auto-remove cmake git && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
