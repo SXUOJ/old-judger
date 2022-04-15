@@ -17,7 +17,7 @@ RUN git clone https://github.com/isther/sandbox.git /tmp/sandbox && \
     cd /tmp/sandbox && mkdir build && cd build && cmake .. && make && cp sandbox /bin 
 
 # judger
-RUN git clone https://github.com/SXUOJ/judger.git /tmp/judger && \
+RUN git clone https://github.com/SXUOJ/old-judger.git /tmp/judger && \
     cd /tmp/judger && git checkout old && go build -o /judger 
 
 # clear
