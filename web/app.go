@@ -1,8 +1,8 @@
 package web
 
 import (
+	"github.com/SXUOJ/judger/env"
 	"github.com/gin-gonic/gin"
-	"github.com/isther/judger/env"
 	"github.com/sirupsen/logrus"
 )
 

@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/isther/judger/web"
-)
+import "github.com/SXUOJ/judger/web"
 
 func main() {
 	app := web.NewApp()
