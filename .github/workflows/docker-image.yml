@@ -6,10 +6,8 @@ on:
       - old
 
 env:
-  # REPO_URL: ccr.ccs.tencentyun.com
-  # TCR_IMAGE_URL: ccr.ccs.tencentyun.com/sxu-oj/judger
   REPO_URL: hkccr.ccs.tencentyun.com
-  TCR_IMAGE_URL: hkccr.ccs.tencentyun.com/sxu-oj/judger
+  TCR_IMAGE_URL: hkccr.ccs.tencentyun.com/sxu-oj/old-judger
 
 jobs:
   setup-build-publish-deploy:
