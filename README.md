@@ -1,1 +1,1 @@
-## Please go to https://github.com/isther/go-judger
+## Please go to https://github.com/isther/judger
